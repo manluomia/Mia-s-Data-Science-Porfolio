@@ -1,3 +1,91 @@
+# Data Modelling
+
+## Data Is Secondary
+- Derived from other systems.
+- Comes later in business evolution.
+- Often an afterthought.
+- Result: Data is often a mess.
+
+## Goals
+- Prepare data for analytics.
+- Synthesize higher-level properties.
+- Merge data from different sources into logical entities.
+- Ready for analysis/KPIs/BI.
+- Answer questions in various analytic categories.
+
+## Concepts of Dimensional Modeling
+- Entities: Unchanging "things" with primary keys.
+- Events: Changes happening to entities over time.
+- Facts: Measurements of cumulative effects of events at a point in time.
+- Dimensions: Descriptive properties of an entity true over time.
+- Grain: Temporal resolution of pre-aggregated facts.
+- Model: A set of facts or dimensions with a common schema.
+- Mart: Namespace for a related collection of models.
+
+## Examples
+- Facts: Order, Stock trade, Sensor reading.
+- Dimensions: Product size & color, Q4 Earnings, Sensor location.
+
+## NYC Transit Example
+- Entities: Bikes, bike stations, bike riders, FHV bases, Taxi company locations, Weather stations.
+- Events: Rides, trips, weather.
+- Facts: Duration, distance, start/end time, tolls, passenger count, wheelchair flag.
+- Dimensions: Temperature, precipitation, base name, taxi company, pick-up location, wheelchair accessible vehicle flag.
+
+## Metrics & KPIs
+- Metrics: Numeric aggregations made with data.
+- Simple Metric Example: Revenue = sum of order values.
+- Complex Metric Example: Customer lifetime value.
+- KPIs: Top-level metrics aligning with business goals.
+
+## Facts and Dimensions
+- Fact tables: Data points about entities with timestamps.
+- Primary keys sometimes present, linked to dimension tables by foreign key.
+- Largest tables in a data model.
+
+## Surrogate Keys
+- Used when fact tables don’t have a primary key.
+- Combination of fields like foreign keys + timestamp for uniqueness.
+
+## Synthesized Dimensions
+- Calculated from events about other entities.
+- Stored when rarely changing, involving complex calculations, or expensive historical data retrieval.
+
+## Changing Dimensions
+- Fixed dimensions like city coordinates vs changing dimensions like a person’s address.
+- Three main approaches: SCD Type I, SCD Type II, Snapshots.
+
+## SCD Types
+- Type I: Ignores changes over time.
+- Type II: Records dimension states over time; most common and optimal but expensive.
+
+## Snapshots
+- Regular snapshots of the whole dimension table.
+- Efficient but lose details between snapshot points.
+
+## Conforming Dimensions
+- Ensure combined dimension columns from different sources have the same meaning.
+
+## Modelling Strategies
+- Snowflake: Traditional relational model with 3NF.
+- One Big Table (OBT): Fully denormalized wide fact table, easier to query but inefficient on storage.
+
+## Choosing an Approach
+- Depends on resources, use case scope, and requirements.
+- OBT for simple, narrow-scope cases.
+- Snowflake with SCDs for well-resourced, wide-scope cases.
+- Star schema: Outdated but still in use.
+
+## Additional Notes
+- Hypercubes/OLAP cubes irrelevant for MPP DWH.
+- Semantic layers: Store metric and dimension definitions once, offering a single source of truth.
+
+## DBT Operations
+- `dbt seed`: Load small in-repo data files.
+- Create fact and dimension tables in DBT models.
+- Run DBT builds and compile analyses for execution.
+
+
 # Designing DBT Models from Scratch: A Framework by Taylor Brownlow
 
 ## Step 1: Discover
